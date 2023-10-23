@@ -98,9 +98,9 @@ class ClientViewModel @Inject constructor(
         }
     }
 
-    fun deleteClient(clientId: Int, clientDto: ClientDto) {
+    fun deleteClient(clientId: Int) {
         viewModelScope.launch {
-            clientRepository.deleteClient(clientId, clientDto)
+            clientRepository.deleteClient(clientId)
         }
     }
 

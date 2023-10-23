@@ -54,7 +54,7 @@ fun ClientScreen(viewModel: ClientViewModel = hiltViewModel()) {
         viewModel.isMessageShownFlow.collectLatest {
             if (it) {
                 snackbarHostState.showSnackbar(
-                    message = "Cliente guardado",
+                    message = "Saved client",
                     duration = SnackbarDuration.Short
                 )
             }
@@ -65,7 +65,7 @@ fun ClientScreen(viewModel: ClientViewModel = hiltViewModel()) {
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            RefreshAppBar(title = "Clientes") {
+            RefreshAppBar(title = "Clients") {
                 viewModel.limpiar()
             }
         }
@@ -77,12 +77,12 @@ fun ClientScreen(viewModel: ClientViewModel = hiltViewModel()) {
                 .padding(8.dp)
         ) {
             val keyboardController = LocalSoftwareKeyboardController.current
-            Text(text = "Cliente detalles", style = MaterialTheme.typography.titleMedium)
+            Text(text = "Client details", style = MaterialTheme.typography.titleMedium)
 
             CustomOutlinedTextField(
                 value = viewModel.nombres,
                 onValueChange = { viewModel.nombres = it },
-                label = "Nombres",
+                label = "Names",
                 isError = viewModel.isValidNombre,
                 imeAction = ImeAction.Next
             )
@@ -96,13 +96,13 @@ fun ClientScreen(viewModel: ClientViewModel = hiltViewModel()) {
             CustomOutlinedTextField(
                 value = viewModel.direccion,
                 onValueChange = { viewModel.direccion = it },
-                label = "Dirección",
+                label = "Address",
                 isError = viewModel.isValidDireccion,
                 imeAction = ImeAction.Next
             )
             OutlinedTextField(
                 value = viewModel.limiteCredito.toString(),
-                label = { Text(text = "Limite crédito") },
+                label = { Text(text = "Limit Credit") },
                 singleLine = true,
                 onValueChange = {
                     val newValue = it.toIntOrNull()
@@ -124,12 +124,13 @@ fun ClientScreen(viewModel: ClientViewModel = hiltViewModel()) {
                 }
             }, modifier = Modifier.fillMaxWidth())
             {
-                Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Guardar")
-                Text(text = "Guardar")
+                Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Save")
+                Text(text = "Save")
             }
+
+            clients.data?.let { Consult(it) }
         }
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -180,13 +181,13 @@ fun Consult(clients: List<ClientDto>) {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        Text(text = "Lista de clientes", style = MaterialTheme.typography.titleMedium)
+        Text(text = "Clients list", style = MaterialTheme.typography.titleMedium)
 
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(clients) { client ->
-                ClientItem(client)
+            items(clients) { cliente ->
+                ClientItem(cliente)
             }
         }
     }
@@ -206,11 +207,14 @@ fun ClientItem(client: ClientDto, viewModel: ClientViewModel = hiltViewModel()) 
             Text(text = client.nombres, style = MaterialTheme.typography.titleMedium)
             Text(text = client.direccion, style = MaterialTheme.typography.titleMedium)
             Text(text = client.rnc, style = MaterialTheme.typography.titleMedium)
-            Text(text = client.limiteCredito.toString(), style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = client.limiteCredito.toString(),
+                style = MaterialTheme.typography.titleMedium
+            )
 
             Button(
                 onClick = {
-                    client.clienteId?.let { viewModel.deleteClient(it, client) }
+                    client.clienteId?.let { viewModel.deleteClient(it) }
                 }
             ) {
                 Text(text = "Eliminar")

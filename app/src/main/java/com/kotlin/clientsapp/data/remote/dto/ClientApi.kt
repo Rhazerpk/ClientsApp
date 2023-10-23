@@ -18,5 +18,5 @@ interface ClientApi{
     suspend fun getClientById(@Path("id") id: Int): ClientDto
 
     @DELETE("/api/Client/{id}")
-    suspend fun deleteClient(@Path("id") id: Int, @Body clientDto: ClientDto): Response<Unit>
+    suspend fun deleteClient(@Path("id") id: Int): Response<Unit>
 }

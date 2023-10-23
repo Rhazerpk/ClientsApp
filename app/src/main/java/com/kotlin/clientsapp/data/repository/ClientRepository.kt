@@ -40,5 +40,5 @@ class ClientRepository @Inject constructor(
     }
 
     suspend fun postClient(client: ClientDto) = api.postClient(client)
-    suspend fun deleteClient(id: Int, client: ClientDto) = api.deleteClient(id, client)
+    suspend fun deleteClient(id: Int) = api.deleteClient(id)
 }
